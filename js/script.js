@@ -720,6 +720,23 @@ function closeLightbox() {
 window.openLightbox = openLightbox;
 
 // ===================================
+// QR Code Lightbox Function
+// ===================================
+function openQRLightbox(imageSrc, caption) {
+    // Create a single-image dataset for the QR code
+    const qrData = [{
+        src: imageSrc,
+        caption: caption
+    }];
+    
+    // Open lightbox with the QR code
+    openLightbox(0, qrData);
+}
+
+// Expose QR lightbox globally
+window.openQRLightbox = openQRLightbox;
+
+// ===================================
 // Touch Swipe Support for Mobile
 // ===================================
 let touchStartX = 0;

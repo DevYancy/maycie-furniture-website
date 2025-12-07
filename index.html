@@ -624,9 +624,9 @@
                     </div>
                     <div class="payment-details">
                         <div class="payment-qr">
-                            <div class="qr-placeholder">
-                                <p>📱 Scan QR Code</p>
-                                <small>Place your GCash QR code image here:<br>images/payment/gcash-qr.png</small>
+                            <div class="qr-wrapper">
+                                <img src="images/gcash-qr/gcash.jpg" alt="GCash QR Code" class="qr-code-image" onclick="openQRLightbox(this.src, 'GCash QR Code - Scan to Pay')" title="Click to enlarge">
+                                <div class="qr-hint">🔍 Click to enlarge</div>
                             </div>
                         </div>
                         <div class="payment-info-text">
@@ -660,10 +660,14 @@
                         <h3>BDO Bank Transfer</h3>
                     </div>
                     <div class="payment-details">
-                        <div class="payment-qr">
-                            <div class="qr-placeholder">
-                                <p>🏦 Bank Details</p>
-                                <small>Place your BDO QR code image here:<br>images/payment/bdo-qr.png</small>
+                        <div class="payment-qr bdo-graphic">
+                            <div class="bank-icon-large">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="120" height="120">
+                                    <path d="M12 2L2 7v2h20V7l-10-5z"/>
+                                    <path d="M4 11v8h2v-8H4zm5 0v8h2v-8H9zm5 0v8h2v-8h-2zm5 0v8h2v-8h-2z"/>
+                                    <path d="M2 20v2h20v-2H2z"/>
+                                </svg>
+                                <p class="bank-text">BDO Unibank</p>
                             </div>
                         </div>
                         <div class="payment-info-text">

@@ -1947,6 +1947,75 @@ section {
     object-fit: contain;
 }
 
+.qr-code-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    object-fit: contain;
+    border: 3px solid var(--secondary-color);
+    padding: 0.5rem;
+    background: white;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.qr-code-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(199, 149, 109, 0.4);
+    border-color: var(--accent-color);
+}
+
+.qr-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.qr-hint {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.qr-wrapper:hover .qr-hint {
+    color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.bdo-graphic {
+    background: linear-gradient(135deg, #f0f7ff, #e3f2fd);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 2px solid #003DA5;
+}
+
+.bank-icon-large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.bank-icon-large svg {
+    color: #003DA5;
+    filter: drop-shadow(0 4px 6px rgba(0, 61, 165, 0.2));
+}
+
+.bank-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #003DA5;
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-secondary);
+    letter-spacing: 1px;
+}
+
 .payment-info-text {
     display: flex;
     flex-direction: column;
@@ -2056,6 +2125,20 @@ section {
     
     .payment-qr {
         order: -1;
+    }
+    
+    .qr-code-image {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .bank-icon-large svg {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .bank-text {
+        font-size: 1.1rem;
     }
     
     .payment-note {
