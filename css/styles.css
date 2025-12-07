@@ -1592,6 +1592,53 @@ section {
     padding: 20px;
 }
 
+.service-modal .modal-content {
+    position: relative;
+    background: white;
+    border-radius: 15px;
+    max-width: 1100px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-modal .modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.service-modal .modal-details {
+    padding: 40px;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+/* Custom scrollbar for service modal */
+.service-modal .modal-details::-webkit-scrollbar {
+    width: 8px;
+}
+
+.service-modal .modal-details::-webkit-scrollbar-track {
+    background: var(--bg-light);
+    border-radius: 10px;
+}
+
+.service-modal .modal-details::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 10px;
+}
+
+.service-modal .modal-details::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
 .modal-media {
     background: var(--bg-light);
     display: flex;
@@ -1835,6 +1882,35 @@ section {
     
     .media-gallery {
         grid-template-columns: 1fr;
+    }
+    
+    .service-modal .modal-body {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+    
+    .service-modal .modal-content {
+        max-height: 95vh;
+        margin: 1rem;
+    }
+    
+    .service-modal .modal-details {
+        padding: 1.5rem;
+        max-height: none;
+    }
+    
+    .modal-media {
+        max-height: 300px;
+        padding: 10px;
+    }
+    
+    .media-main {
+        min-height: 250px;
+    }
+    
+    .media-main img,
+    .media-main video {
+        max-height: 250px;
     }
 }
 
