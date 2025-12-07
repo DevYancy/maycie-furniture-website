@@ -64,7 +64,7 @@ const serviceData = {
             { type: 'image', src: 'images/exterior perspectives/higher HD_1 - Photo.jpg' },
             { type: 'image', src: 'images/exterior perspectives/higher HD_2 - Photo.jpg' },
             { type: 'image', src: 'images/exterior perspectives/higher HD_4 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/Renders_4 - Photo' },
+            { type: 'image', src: 'images/exterior perspectives/render.jpg' },
             { type: 'image', src: 'images/exterior perspectives/Al Fresco.png' },
             { type: 'image', src: 'images/exterior perspectives/perp.png' }
         ]
@@ -200,6 +200,17 @@ function updateMediaGallery() {
         img.alt = 'Service media';
         img.style.cursor = 'pointer';
         img.onclick = () => openServiceLightbox(currentMediaIndex);
+        img.onerror = function() {
+            console.error('Failed to load image:', item.src);
+            this.style.display = 'none';
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'image-error';
+            errorMsg.textContent = 'Image failed to load';
+            errorMsg.style.padding = '20px';
+            errorMsg.style.textAlign = 'center';
+            errorMsg.style.color = '#999';
+            mediaContainer.appendChild(errorMsg);
+        };
         mediaContainer.appendChild(img);
     } else if (item.type === 'video') {
         const video = document.createElement('video');
@@ -292,36 +303,25 @@ function openServiceLightbox(startIndex) {
     // Create service-specific lightbox with all images
     const imageMedia = currentServiceMedia.filter(item => item.type === 'image');
     if (imageMedia.length === 0) return;
-    
-    // Find the index in image-only array
+
+    // Find the correct index inside image-only array
+    // Count how many images come before the startIndex
     let imageIndex = 0;
-    let count = 0;
-    for (let i = 0; i <= startIndex; i++) {
+    for (let i = 0; i < startIndex; i++) {
         if (currentServiceMedia[i].type === 'image') {
-            if (i === startIndex) {
-                imageIndex = count;
-                break;
-            }
-            count++;
+            imageIndex++;
         }
     }
-    
-    // Use the gallery lightbox if available
-    if (typeof openLightbox === 'function' && typeof window.galleryData !== 'undefined') {
-        const originalGalleryData = [...window.galleryData];
-        window.galleryData = imageMedia.map(item => ({
-            src: item.src,
-            caption: document.getElementById('serviceModalTitle').textContent
-        }));
-        openLightbox(imageIndex);
-        
-        // Restore after lightbox closes
-        const checkLightbox = setInterval(() => {
-            if (!window.activeLightbox) {
-                window.galleryData = originalGalleryData;
-                clearInterval(checkLightbox);
-            }
-        }, 500);
+
+    // Build dataset for this service only
+    const serviceGallery = imageMedia.map(item => ({
+        src: item.src,
+        caption: document.getElementById('serviceModalTitle').textContent
+    }));
+
+    // Open lightbox using custom dataset
+    if (typeof openLightbox === 'function') {
+        openLightbox(imageIndex, serviceGallery);
     }
 }
 
@@ -362,5 +362,91 @@ document.addEventListener('click', (e) => {
     const modal = document.getElementById('serviceModal');
     if (modal && e.target === modal) {
         closeServiceModal();
+    }
+});
+
+
+// ===================================
+// Touch Swipe Support for Service Modal
+// ===================================
+let serviceTouchStartX = 0;
+let serviceTouchEndX = 0;
+let serviceTouchStartY = 0;
+let serviceTouchEndY = 0;
+
+document.addEventListener('touchstart', (e) => {
+    const serviceModal = document.getElementById('serviceModal');
+    if (serviceModal && serviceModal.classList.contains('active')) {
+        serviceTouchStartX = e.changedTouches[0].screenX;
+        serviceTouchStartY = e.changedTouches[0].screenY;
+    }
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+    const serviceModal = document.getElementById('serviceModal');
+    if (serviceModal && serviceModal.classList.contains('active')) {
+        serviceTouchEndX = e.changedTouches[0].screenX;
+        serviceTouchEndY = e.changedTouches[0].screenY;
+        handleServiceSwipe();
+    }
+}, { passive: true });
+
+function handleServiceSwipe() {
+    const swipeThreshold = 50;
+    const swipeDistance = serviceTouchEndX - serviceTouchStartX;
+    const verticalDistance = Math.abs(serviceTouchEndY - serviceTouchStartY);
+    
+    // Only trigger horizontal swipe if vertical movement is minimal
+    if (verticalDistance > 100) return;
+    
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            navigateService('prev');
+        } else {
+            navigateService('next');
+        }
+    }
+}
+
+// ===================================
+// Keyboard Navigation for Service Modal
+// ===================================
+document.addEventListener('keydown', (e) => {
+    const serviceModal = document.getElementById('serviceModal');
+    if (serviceModal && serviceModal.classList.contains('active')) {
+        if (e.key === 'Escape') {
+            closeServiceModal();
+        } else if (e.key === 'ArrowRight') {
+            navigateService('next');
+        } else if (e.key === 'ArrowLeft') {
+            navigateService('prev');
+        }
+    }
+});
+
+// ===================================
+// Touch Events for Service Modal Navigation Buttons
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+    const serviceModal = document.getElementById('serviceModal');
+    if (serviceModal) {
+        const servicePrev = serviceModal.querySelector('.modal-prev');
+        const serviceNext = serviceModal.querySelector('.modal-next');
+        
+        if (servicePrev) {
+            servicePrev.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateService('prev');
+            }, { passive: false });
+        }
+        
+        if (serviceNext) {
+            serviceNext.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateService('next');
+            }, { passive: false });
+        }
     }
 });

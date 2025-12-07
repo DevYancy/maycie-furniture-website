@@ -208,45 +208,59 @@
             </div>
             <div class="services-grid">
                 <!-- Floor Plans Service -->
-                <div class="service-card" data-service="floor-plans">
+                <div class="service-card" data-service="floor-plans" onclick="openServiceModal('floor-plans')">
                     <div class="service-image">
                         <img src="images/floor_plan/1.JPG" alt="Floor Plans">
                         <div class="service-badge">Starting at ₱300/sqm</div>
                     </div>
+
                     <div class="service-content">
                         <h3>Floor Plans</h3>
                         <p>Clarified layouts with all furniture and fixtures properly arranged and proportional to the actual site</p>
-                        <button class="btn btn-primary btn-sm" onclick="openServiceModal('floor-plans')">View Details</button>
+
+                        <button 
+                            class="btn btn-primary btn-sm" 
+                            onclick="event.stopPropagation(); openServiceModal('floor-plans')"
+                        >
+                            View Details
+                        </button>
                     </div>
                 </div>
+
 
                 <!-- Interior Elevations Service -->
-                <div class="service-card" data-service="interior-elevations">
-                    <div class="service-image">
-                        <img src="images/interior/2.png" alt="Interior Elevations">
-                        <div class="service-badge">10% of Floor Plan</div>
-                    </div>
-                    <div class="service-content">
-                        <h3>Interior Elevations</h3>
-                        <p>Visualize your space through various views showing cabinetry, fixtures, and furniture arrangements</p>
-                        <button class="btn btn-primary btn-sm" onclick="openServiceModal('interior-elevations')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openServiceModal('interior-elevations')">
+                    <div class="service-card" data-service="interior-elevations">
+                        <div class="service-image">
+                            <img src="images/interior/2.png" alt="Interior Elevations">
+                            <div class="service-badge">10% of Floor Plan</div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Interior Elevations</h3>
+                            <p>Visualize your space through various views showing cabinetry, fixtures, and furniture arrangements</p>
+                            <button class="btn btn-primary btn-sm" 
+                            onclick=" event.stopPropagation(); openServiceModal('interior-elevations')">View Details</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Perspectives Service -->
-                <div class="service-card" data-service="perspectives">
-                    <div class="service-image">
-                        <img src="images/exterior perspectives/higher HD_1 - Photo.jpg" alt="Perspectives">
-                        <div class="service-badge">From ₱500</div>
-                    </div>
-                    <div class="service-content">
-                        <h3>Perspectives</h3>
-                        <p>Photorealistic 3D renderings in Full HD, 4K, or 8K resolution for stunning visualization</p>
-                        <button class="btn btn-primary btn-sm" onclick="openServiceModal('perspectives')">View Details</button>
-                    </div>
-                </div>
+                        <!-- Perspectives Service -->
+                        <div class="service-card" data-service="floor-plans" onclick="openServiceModal('perspectives')">
+                            <div class="service-card" data-service="perspectives">
+                                <div class="service-image">
+                                    <img src="images/exterior perspectives/higher HD_1 - Photo.jpg" alt="Perspectives">
+                                    <div class="service-badge">From ₱500</div>
+                                </div>
+                                <div class="service-content">
+                                    <h3>Perspectives</h3>
+                                    <p>Photorealistic 3D renderings in Full HD, 4K, or 8K resolution for stunning visualization</p>
+                                    <button class="btn btn-primary btn-sm" onclick=" event.stopPropagation(); openServiceModal('perspectives')">View Details</button>
+                                </div>
+                            </div>
+                        </div>
 
                 <!-- Walkthroughs Service -->
+            <div class="service-card" data-service="floor-plans" onclick="openServiceModal('perspectives')">
                 <div class="service-card" data-service="walkthroughs">
                     <div class="service-image">
                         <video autoplay loop muted playsinline>
@@ -258,9 +272,10 @@
                     <div class="service-content">
                         <h3>Walkthroughs</h3>
                         <p>Experience your interior through immersive video walkthroughs before construction begins</p>
-                        <button class="btn btn-primary btn-sm" onclick="openServiceModal('walkthroughs')">View Details</button>
+                        <button class="btn btn-primary btn-sm" onclick=" event.stopPropagation(); openServiceModal('walkthroughs')">View Details</button>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </section>
@@ -274,100 +289,116 @@
                 <div class="section-divider"></div>
             </div>
             <div class="products-grid">
-                <div class="product-card" data-product="living-room">
-                    <div class="product-image">
-                        <img src="images/products/couches.jpg" alt="Living Room Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('living-room')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('living-room')">
+                    <div class="product-card" data-product="living-room">
+                        <div class="product-image">
+                            <img src="images/products/couches.jpg" alt="Living Room Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation(); openProductModal('living-room')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Living Room</h3>
-                        <p>Elegant sofas, couches, and entertainment units</p>
+                        <div class="product-info">
+                            <h3>Living Room</h3>
+                            <p>Elegant sofas, couches, and entertainment units</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="bedroom">
-                    <div class="product-image">
-                        <img src="images/products/bedframes.jpg" alt="Bedroom Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('bedroom')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('bedroom')">
+                    <div class="product-card" data-product="bedroom">
+                        <div class="product-image">
+                            <img src="images/products/bedframes.jpg" alt="Bedroom Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation();  openProductModal('bedroom')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Bedroom</h3>
-                        <p>Comfortable beds, wardrobes, and bed frames</p>
+                        <div class="product-info">
+                            <h3>Bedroom</h3>
+                            <p>Comfortable beds, wardrobes, and bed frames</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="dining">
-                    <div class="product-image">
-                        <img src="images/products/dining.jpg" alt="Dining Room Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('dining')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('dining')">
+                    <div class="product-card" data-product="dining">
+                        <div class="product-image">
+                            <img src="images/products/dining.jpg" alt="Dining Room Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation(); openProductModal('dining')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Dining Room</h3>
-                        <p>Stylish dining tables, chairs, and buffets</p>
+                        <div class="product-info">
+                            <h3>Dining Room</h3>
+                            <p>Stylish dining tables, chairs, and buffets</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="office">
-                    <div class="product-image">
-                        <img src="images/products/chairs.jpg" alt="Office Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('office')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('office')">
+                    <div class="product-card" data-product="office">
+                        <div class="product-image">
+                            <img src="images/products/chairs.jpg" alt="Office Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick=" event.stopPropagation();  openProductModal('office')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Office Chairs</h3>
-                        <p>Professional ergonomic chairs and seating solutions</p>
+                        <div class="product-info">
+                            <h3>Office Chairs</h3>
+                            <p>Professional ergonomic chairs and seating solutions</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="cabinets">
-                    <div class="product-image">
-                        <img src="images/products/cabinets.jpg" alt="Cabinets & Storage">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('cabinets')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('cabinets')">
+                    <div class="product-card" data-product="cabinets">
+                        <div class="product-image">
+                            <img src="images/products/cabinets.jpg" alt="Cabinets & Storage">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation();  openProductModal('cabinets')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Cabinets</h3>
-                        <p>Modular cabinets and storage solutions</p>
+                        <div class="product-info">
+                            <h3>Cabinets</h3>
+                            <p>Modular cabinets and storage solutions</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="tables">
-                    <div class="product-image">
-                        <img src="images/products/tables.jpg" alt="Tables & Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('tables')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('tables')">
+                    <div class="product-card" data-product="tables">
+                        <div class="product-image">
+                            <img src="images/products/tables.jpg" alt="Tables & Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation();  openProductModal('tables')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Tables</h3>
-                        <p>Custom tables and specialty furniture pieces</p>
+                        <div class="product-info">
+                            <h3>Tables</h3>
+                            <p>Custom tables and specialty furniture pieces</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="kitchen">
-                    <div class="product-image">
-                        <img src="images/products/kitchen.jpg" alt="Kitchen Furniture">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('kitchen')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('kitchen')">
+                    <div class="product-card" data-product="kitchen">
+                        <div class="product-image">
+                            <img src="images/products/kitchen.jpg" alt="Kitchen Furniture">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="event.stopPropagation();  openProductModal('kitchen')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Kitchen</h3>
-                        <p>Modern kitchen cabinets and designs</p>
+                        <div class="product-info">
+                            <h3>Kitchen</h3>
+                            <p>Modern kitchen cabinets and designs</p>
+                        </div>
                     </div>
                 </div>
-                <div class="product-card" data-product="tvracks">
-                    <div class="product-image">
-                        <img src="images/products/tv racks.jpg" alt="TV Racks">
-                        <div class="product-overlay">
-                            <button class="btn-view" onclick="openProductModal('tvracks')">View Details</button>
+                <div class="service-card" data-service="floor-plans" onclick="openProductModal('tvracks')">
+                    <div class="product-card" data-product="tvracks">
+                        <div class="product-image">
+                            <img src="images/products/tv racks.jpg" alt="TV Racks">
+                            <div class="product-overlay">
+                                <button class="btn-view" onclick="openProductModal('tvracks')">View Details</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>TV Racks</h3>
-                        <p>Entertainment centers and media storage</p>
+                        <div class="product-info">
+                            <h3>TV Racks</h3>
+                            <p>Entertainment centers and media storage</p>
+                        </div>
                     </div>
                 </div>
             </div>

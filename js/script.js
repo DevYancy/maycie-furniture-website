@@ -1,1080 +1,7 @@
 // ===================================
-// Navigation & Scroll Effects
+// Product Details Data (Defined first to avoid initialization errors)
 // ===================================
-
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
-
-// Active navigation link on scroll
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-link');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.scrollY >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
-    });
-});
-
-// ===================================
-// Mobile Menu Toggle
-// ===================================
-const hamburger = document.getElementById('hamburger');
-const navLinksContainer = document.getElementById('navLinks');
-
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinksContainer.classList.toggle('active');
-});
-
-// Close mobile menu when clicking on a link
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinksContainer.classList.remove('active');
-    });
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !navLinksContainer.contains(e.target)) {
-        hamburger.classList.remove('active');
-        navLinksContainer.classList.remove('active');
-    }
-});
-
-// ===================================
-// Smooth Scroll
-// ===================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const offsetTop = target.offsetTop - 80;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// ===================================
-// Back to Top Button
-// ===================================
-const backToTopBtn = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-        backToTopBtn.classList.add('visible');
-    } else {
-        backToTopBtn.classList.remove('visible');
-    }
-});
-
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-// ===================================
-// Scroll Reveal Animations
-// ===================================
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe elements for scroll animation
-const animateOnScroll = document.querySelectorAll('.product-card, .gallery-item, .testimonial-card, .feature, .about-image');
-animateOnScroll.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-});
-
-// ===================================
-// Product Card Hover Effects
-// ===================================
-const productCards = document.querySelectorAll('.product-card');
-productCards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// ===================================
-// Contact Form Handling
-// ===================================
-const contactForm = document.getElementById('contactForm');
-
-// Check if running on local file or web server
-function isLocalFile() {
-    return window.location.protocol === 'file:';
-}
-
-// Show local file notice and mailto fallback if needed
-if (isLocalFile()) {
-    document.getElementById('localFileNotice').style.display = 'block';
-    document.getElementById('mailtoFallback').style.display = 'block';
-}
-
-// Mailto fallback function
-function sendViaEmail() {
-    const name = document.getElementById('contactName').value;
-    const email = document.getElementById('contactEmail').value;
-    const phone = document.getElementById('contactPhone').value;
-    const subject = document.getElementById('contactSubject').value;
-    const message = document.getElementById('contactMessage').value;
-    
-    const emailSubject = `New Contact Form Submission - Maycie Furniture`;
-    const emailBody = `Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Subject: ${subject}
-Message: ${message}
-
----
-Sent from Maycie Furniture Website Contact Form`;
-    
-    const mailtoLink = `mailto:yancyalmiranez@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    window.location.href = mailtoLink;
-    
-    showNotification('Opening your email client...', 'success');
-}
-
-// Add event listener for mailto fallback
-document.getElementById('mailtoFallback').addEventListener('click', sendViaEmail);
-
-// Add form validation and user feedback
-contactForm.addEventListener('submit', (e) => {
-    if (isLocalFile()) {
-        // Prevent form submission on local file and use mailto instead
-        e.preventDefault();
-        sendViaEmail();
-        return;
-    }
-    
-    // Let the form submit naturally to FormSubmit when on web server
-    // Show loading state
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
-    
-    // Show notification
-    showNotification('Sending your message...', 'success');
-    
-    // Note: Form will redirect to thank-you page automatically
-    // This is just for immediate user feedback
-});
-
-// ===================================
-// Notification System
-// ===================================
-function showNotification(message, type = 'success') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Style the notification
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#4CAF50' : '#f44336'};
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 5px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Remove after 4 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 4000);
-}
-
-// Add notification animations to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// ===================================
-// Service Details Data
-// ===================================
-const serviceOrder = ['floor-plans', 'interior-elevations', 'perspectives', 'walkthroughs'];
-let currentServiceIndex = 0;
-
-const serviceData = {
-    'floor-plans': {
-        title: 'Floor Plans',
-        description: 'A clarified layout wherein all furniture, decorations and other miscellaneous fixtures are properly arranged while also being proportional to the actual site itself.',
-        pricing: [
-            { label: 'Per Square Meter', price: '₱300 - ₱400' },
-            { label: 'Note', price: 'May depend on land prices within the municipality or locality' }
-        ],
-        expectations: 'Within the floor plan lies the individual furniture detailed into a catalogue comprising of its dimensions, type of material, type of furniture and its theme. Clients may also request for revisions depending on its complexity.',
-        inclusions: [
-            'Floor plans',
-            'Reflective Ceiling Plans',
-            'Furniture Layout',
-            'Power Layout',
-            'Floor Material Plan',
-            'Wall Material Plan'
-        ],
-        media: [
-            { type: 'image', src: 'images/floor_plan/1.JPG' },
-            { type: 'image', src: 'images/floor_plan/2.JPG' },
-            { type: 'image', src: 'images/floor_plan/3.JPG' },
-            { type: 'image', src: 'images/floor_plan/4.JPG' },
-            { type: 'image', src: 'images/floor_plan/5.JPG' },
-            { type: 'image', src: 'images/floor_plan/6.JPG' },
-            { type: 'image', src: 'images/floor_plan/7.JPG' }
-        ]
-    },
-    'interior-elevations': {
-        title: 'Interior Elevations',
-        description: 'Interior elevations can assist the visualization of a space via its various views (front, back, left and right) where the cabinetry, fixtures and other furniture can be seen according to the floor plan.',
-        pricing: [
-            { label: '4 Views', price: '10% of total floor plan price' },
-            { label: 'Blow-up Plans', price: 'Additional cost depending on complexity' }
-        ],
-        expectations: 'The interior elevations can also envision how other materials, lighting and space come into one cohesive piece.',
-        media: [
-            { type: 'image', src: 'images/interior/1.png' },
-            { type: 'image', src: 'images/interior/2.png' },
-            { type: 'image', src: 'images/interior/3.png' },
-            { type: 'image', src: 'images/interior/4.png' },
-            { type: 'image', src: 'images/interior/5.png' },
-            { type: 'image', src: 'images/interior/6.png' },
-            { type: 'image', src: 'images/interior/7.png' },
-            { type: 'image', src: 'images/interior/9.png' }
-        ]
-    },
-    'perspectives': {
-        title: '3D Perspectives',
-        description: 'Perspectives can adhere the floor plan and interior elevation views into one three dimensional or 2 dimensional photo where the details may vary depending on its quality.',
-        pricing: [
-            { label: 'Full HD', price: '₱500' },
-            { label: '4K Resolution', price: '₱1,500' },
-            { label: '8K Resolution', price: '₱3,500' }
-        ],
-        expectations: 'The perspective views can highlight each detail without having the need to purchase the said object as the product will be on par with its actual.',
-        leadtime: [
-            { label: 'Full HD', time: '1 hour' },
-            { label: '4K', time: '5-8 hours' },
-            { label: '8K', time: '2 days' }
-        ],
-        media: [
-            { type: 'image', src: 'images/exterior perspectives/higher HD_1 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_2 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_3 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_4 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/Al Fresco.png' },
-            { type: 'image', src: 'images/exterior perspectives/perp.png' }
-        ]
-    },
-    'walkthroughs': {
-        title: '3D Walkthroughs',
-        description: 'A walkthrough, as the name implies, is a 3 dimensional motion picture/video that lets the client experience the interior without having to waste much materials and waiting for its actual construction.',
-        pricing: [
-            { label: 'HD', price: '₱850' },
-            { label: 'Full HD', price: '₱1,500' },
-            { label: 'Quad HD', price: '₱4,000' },
-            { label: '4K', price: '₱7,000' }
-        ],
-        expectations: 'The walkthrough can be viewed in various angles while also maintaining its quality throughout each movement, whether it would be in the interior or exterior face of the household, the walkthrough can project it.',
-        leadtime: [
-            { label: 'HD', time: '3 hours' },
-            { label: 'Full HD', time: '6 hours' },
-            { label: 'Quad HD', time: '12 hours' },
-            { label: '4K', time: '3 days' }
-        ],
-        media: [
-            { type: 'video', src: 'images/walkthroughs/walkthrough.mp4' },
-            { type: 'video', src: 'images/walkthroughs/Render walkthrough.mp4' }
-        ]
-    }
-};
-
-// ===================================
-// Service Modal Functions
-// ===================================
-function openServiceModal(serviceId) {
-    const modal = document.getElementById('serviceModal');
-    const data = serviceData[serviceId];
-    
-    if (!data) {
-        console.error('Service not found:', serviceId);
-        return;
-    }
-    
-    currentServiceIndex = serviceOrder.indexOf(serviceId);
-    updateServiceModalContent(data);
-    
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function updateServiceModalContent(data) {
-    document.getElementById('serviceModalTitle').textContent = data.title;
-    document.getElementById('serviceModalDescription').textContent = data.description;
-    document.getElementById('serviceExpectations').textContent = data.expectations;
-    
-    // Update pricing
-    const pricingContainer = document.getElementById('servicePricing');
-    pricingContainer.innerHTML = '';
-    data.pricing.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'pricing-item';
-        div.innerHTML = `<strong>${item.label}:</strong> <span>${item.price}</span>`;
-        pricingContainer.appendChild(div);
-    });
-    
-    // Update inclusions if available
-    if (data.inclusions) {
-        document.getElementById('serviceInclusionsSection').style.display = 'block';
-        const inclusionsList = document.getElementById('serviceInclusions');
-        inclusionsList.innerHTML = '';
-        data.inclusions.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            inclusionsList.appendChild(li);
-        });
-    } else {
-        document.getElementById('serviceInclusionsSection').style.display = 'none';
-    }
-    
-    // Update lead time if available
-    if (data.leadtime) {
-        document.getElementById('serviceLeadtimeSection').style.display = 'block';
-        const leadtimeContainer = document.getElementById('serviceLeadtime');
-        leadtimeContainer.innerHTML = '';
-        data.leadtime.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'leadtime-item';
-            div.innerHTML = `<strong>${item.label}:</strong> <span>${item.time}</span>`;
-            leadtimeContainer.appendChild(div);
-        });
-    } else {
-        document.getElementById('serviceLeadtimeSection').style.display = 'none';
-    }
-    
-    // Update media gallery
-    const gallery = document.getElementById('serviceMediaGallery');
-    gallery.innerHTML = '';
-    data.media.forEach(item => {
-        if (item.type === 'image') {
-            const img = document.createElement('img');
-            img.src = item.src;
-            img.alt = data.title;
-            img.onclick = () => openLightboxFromService(item.src, data.title);
-            gallery.appendChild(img);
-        } else if (item.type === 'video') {
-            const video = document.createElement('video');
-            video.controls = true;
-            video.loop = true;
-            const source = document.createElement('source');
-            source.src = item.src;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            gallery.appendChild(video);
-        }
-    });
-}
-
-function navigateService(direction) {
-    if (direction === 'next') {
-        currentServiceIndex = (currentServiceIndex + 1) % serviceOrder.length;
-    } else {
-        currentServiceIndex = (currentServiceIndex - 1 + serviceOrder.length) % serviceOrder.length;
-    }
-    
-    const serviceId = serviceOrder[currentServiceIndex];
-    const data = serviceData[serviceId];
-    
-    const modalBody = document.querySelector('.service-modal .modal-body');
-    modalBody.style.opacity = '0';
-    modalBody.style.transform = direction === 'next' ? 'translateX(20px)' : 'translateX(-20px)';
-    
-    setTimeout(() => {
-        updateServiceModalContent(data);
-        modalBody.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        modalBody.style.opacity = '1';
-        modalBody.style.transform = 'translateX(0)';
-    }, 150);
-}
-
-function closeServiceModal() {
-    const modal = document.getElementById('serviceModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function openLightboxFromService(src, caption) {
-    // Create temporary gallery item for lightbox
-    const tempData = [{ src: src, caption: caption }];
-    const originalGalleryData = [...galleryData];
-    galleryData.length = 0;
-    galleryData.push(...tempData);
-    openLightbox(0);
-    // Restore original gallery data after opening
-    setTimeout(() => {
-        galleryData.length = 0;
-        galleryData.push(...originalGalleryData);
-    }, 100);
-}
-
-// Close service modal when clicking outside
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('serviceModal');
-    if (e.target === modal) {
-        closeServiceModal();
-    }
-});
-
-// ===================================
-// Gallery Lightbox Effect
-// ===================================
-const galleryItems = document.querySelectorAll('.gallery-item');
-let currentGalleryIndex = 0;
-let activeLightbox = null;
-
-// Create gallery data array
-const galleryData = Array.from(galleryItems).map(item => ({
-    src: item.querySelector('img').src,
-    caption: item.querySelector('.gallery-overlay span').textContent
-}));
-
-function openLightbox(index) {
-    currentGalleryIndex = index;
-    
-    // Create lightbox if it doesn't exist
-    if (!activeLightbox) {
-        activeLightbox = document.createElement('div');
-        activeLightbox.className = 'lightbox';
-        activeLightbox.innerHTML = `
-            <div class="lightbox-content">
-                <span class="lightbox-close">&times;</span>
-                <button class="lightbox-nav lightbox-prev" title="Previous Image">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <button class="lightbox-nav lightbox-next" title="Next Image">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-                <img class="lightbox-image" src="" alt="">
-                <p class="lightbox-caption"></p>
-                <div class="lightbox-counter"></div>
-            </div>
-        `;
-        
-        // Style lightbox
-        activeLightbox.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        `;
-        
-        const lightboxContent = activeLightbox.querySelector('.lightbox-content');
-        lightboxContent.style.cssText = `
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        `;
-        
-        const img = activeLightbox.querySelector('.lightbox-image');
-        img.style.cssText = `
-            max-width: 100%;
-            max-height: 80vh;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            transition: opacity 0.3s ease;
-        `;
-        
-        const caption_el = activeLightbox.querySelector('.lightbox-caption');
-        caption_el.style.cssText = `
-            color: white;
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 1.2rem;
-        `;
-        
-        const counter = activeLightbox.querySelector('.lightbox-counter');
-        counter.style.cssText = `
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        `;
-        
-        const closeBtn = activeLightbox.querySelector('.lightbox-close');
-        closeBtn.style.cssText = `
-            position: absolute;
-            top: -50px;
-            right: 0;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
-            z-index: 100;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        `;
-        
-        const navButtons = activeLightbox.querySelectorAll('.lightbox-nav');
-        navButtons.forEach(btn => {
-            btn.style.cssText = `
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(255, 255, 255, 0.9);
-                border: none;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-                color: #2c3e50;
-                z-index: 100;
-                -webkit-tap-highlight-color: transparent;
-                touch-action: manipulation;
-            `;
-        });
-        
-        activeLightbox.querySelector('.lightbox-prev').style.left = '20px';
-        activeLightbox.querySelector('.lightbox-next').style.right = '20px';
-        
-        // Event listeners
-        closeBtn.addEventListener('mouseover', function() {
-            this.style.transform = 'scale(1.2) rotate(90deg)';
-            this.style.background = 'rgba(199, 149, 109, 0.9)';
-        });
-        
-        closeBtn.addEventListener('mouseout', function() {
-            this.style.transform = 'scale(1)';
-            this.style.background = 'rgba(255, 255, 255, 0.1)';
-        });
-        
-        navButtons.forEach(btn => {
-            btn.addEventListener('mouseover', function() {
-                this.style.transform = 'translateY(-50%) scale(1.1)';
-                this.style.background = '#c7956d';
-                this.style.color = 'white';
-            });
-            
-            btn.addEventListener('mouseout', function() {
-                this.style.transform = 'translateY(-50%) scale(1)';
-                this.style.background = 'rgba(255, 255, 255, 0.9)';
-                this.style.color = '#2c3e50';
-            });
-        });
-        
-        // Click events
-        closeBtn.addEventListener('click', closeLightbox);
-        const prevBtn = activeLightbox.querySelector('.lightbox-prev');
-        const nextBtn = activeLightbox.querySelector('.lightbox-next');
-        
-        prevBtn.addEventListener('click', () => navigateGallery('prev'));
-        nextBtn.addEventListener('click', () => navigateGallery('next'));
-        
-        // Touch events for mobile
-        prevBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            navigateGallery('prev');
-        }, { passive: false });
-        
-        nextBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            navigateGallery('next');
-        }, { passive: false });
-        
-        closeBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            closeLightbox();
-        }, { passive: false });
-        
-        activeLightbox.addEventListener('click', (e) => {
-            if (e.target === activeLightbox) {
-                closeLightbox();
-            }
-        });
-        
-        document.body.appendChild(activeLightbox);
-    }
-    
-    // Update content
-    updateLightboxContent();
-    document.body.style.overflow = 'hidden';
-}
-
-function updateLightboxContent() {
-    const data = galleryData[currentGalleryIndex];
-    const img = activeLightbox.querySelector('.lightbox-image');
-    const caption = activeLightbox.querySelector('.lightbox-caption');
-    const counter = activeLightbox.querySelector('.lightbox-counter');
-    
-    img.style.opacity = '0';
-    
-    setTimeout(() => {
-        img.src = data.src;
-        img.alt = data.caption;
-        caption.textContent = data.caption;
-        counter.textContent = `${currentGalleryIndex + 1} / ${galleryData.length}`;
-        img.style.opacity = '1';
-    }, 150);
-}
-
-function navigateGallery(direction) {
-    if (direction === 'next') {
-        currentGalleryIndex = (currentGalleryIndex + 1) % galleryData.length;
-    } else {
-        currentGalleryIndex = (currentGalleryIndex - 1 + galleryData.length) % galleryData.length;
-    }
-    updateLightboxContent();
-}
-
-function closeLightbox() {
-    if (activeLightbox) {
-        activeLightbox.style.animation = 'fadeOut 0.3s ease';
-        setTimeout(() => {
-            activeLightbox.remove();
-            activeLightbox = null;
-            document.body.style.overflow = '';
-        }, 300);
-    }
-}
-
-// Add click listeners to gallery items
-galleryItems.forEach((item, index) => {
-    item.addEventListener('click', () => openLightbox(index));
-});
-
-// ===================================
-// Touch Swipe Support for Mobile
-// ===================================
-let touchStartX = 0;
-let touchEndX = 0;
-
-document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-document.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, { passive: true });
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const swipeDistance = touchEndX - touchStartX;
-    
-    // Gallery lightbox swipe
-    if (activeLightbox && Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
-            navigateGallery('prev');
-        } else {
-            navigateGallery('next');
-        }
-        return;
-    }
-    
-    // Service modal swipe
-    const serviceModal = document.getElementById('serviceModal');
-    if (serviceModal && serviceModal.classList.contains('active') && Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
-            navigateService('prev');
-        } else {
-            navigateService('next');
-        }
-        return;
-    }
-    
-    // Product modal swipe
-    const productModal = document.getElementById('productModal');
-    if (productModal && productModal.classList.contains('active') && Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
-            navigateProduct('prev');
-        } else {
-            navigateProduct('next');
-        }
-    }
-}
-
-// Add fadeIn/fadeOut animations
-const fadeStyle = document.createElement('style');
-fadeStyle.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
-    }
-`;
-document.head.appendChild(fadeStyle);
-
-// ===================================
-// Page Load Animation
-// ===================================
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease';
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// ===================================
-// Parallax Effect for Hero Section
-// ===================================
-window.addEventListener('scroll', () => {
-    const hero = document.querySelector('.hero');
-    const scrolled = window.scrollY;
-    if (hero) {
-        hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
-    }
-});
-
-// ===================================
-// Console Welcome Message
-// ===================================
-console.log('%c Welcome to Maycie Furniture & Fixture Trading! ', 'background: #c7956d; color: white; font-size: 20px; padding: 10px;');
-console.log('%c Crafting Quality Furniture for Your Perfect Space ', 'background: #2c3e50; color: white; font-size: 14px; padding: 5px;');
-
-// ===================================
-// Service Details Data
-// ===================================
-const serviceOrder = ['floor-plans', 'interior-elevations', 'perspectives', 'walkthroughs'];
-let currentServiceIndex = 0;
-
-const serviceData = {
-    'floor-plans': {
-        title: 'Floor Plans',
-        description: 'A clarified layout wherein all furniture, decorations and other miscellaneous fixtures are properly arranged while also being proportional to the actual site itself.',
-        pricing: [
-            { label: 'Per Square Meter', price: '₱300 - ₱400' },
-            { label: 'Note', price: 'May depend on land prices within the municipality or locality' }
-        ],
-        expectations: 'Within the floor plan lies the individual furniture detailed into a catalogue comprising of its dimensions, type of material, type of furniture and its theme. Clients may also request for revisions depending on its complexity.',
-        inclusions: [
-            'Floor plans',
-            'Reflective Ceiling Plans',
-            'Furniture Layout',
-            'Power Layout',
-            'Floor Material Plan',
-            'Wall Material Plan'
-        ],
-        media: [
-            { type: 'image', src: 'images/floor_plan/1.JPG' },
-            { type: 'image', src: 'images/floor_plan/2.JPG' },
-            { type: 'image', src: 'images/floor_plan/3.JPG' },
-            { type: 'image', src: 'images/floor_plan/4.JPG' },
-            { type: 'image', src: 'images/floor_plan/5.JPG' },
-            { type: 'image', src: 'images/floor_plan/6.JPG' },
-            { type: 'image', src: 'images/floor_plan/7.JPG' }
-        ]
-    },
-    'interior-elevations': {
-        title: 'Interior Elevations',
-        description: 'Interior elevations can assist the visualization of a space via its various views (front, back, left and right) where the cabinetry, fixtures and other furniture can be seen according to the floor plan.',
-        pricing: [
-            { label: '4 Views', price: '10% of total floor plan price' },
-            { label: 'Blow-up Plans', price: 'Additional cost depending on complexity' }
-        ],
-        expectations: 'The interior elevations can also envision how other materials, lighting and space come into one cohesive piece.',
-        media: [
-            { type: 'image', src: 'images/interior/2.png' },
-            { type: 'image', src: 'images/interior/3.png' },
-            { type: 'image', src: 'images/interior/4.png' },
-            { type: 'image', src: 'images/interior/5.png' }
-        ]
-    },
-    'perspectives': {
-        title: '3D Perspectives',
-        description: 'Perspectives can adhere the floor plan and interior elevation views into one three dimensional or 2 dimensional photo where the details may vary depending on its quality.',
-        pricing: [
-            { label: 'Full HD', price: '₱500' },
-            { label: '4K Resolution', price: '₱1,500' },
-            { label: '8K Resolution', price: '₱3,500' }
-        ],
-        expectations: 'The perspective views can highlight each detail without having the need to purchase the said object as the product will be on par with its actual.',
-        leadtime: [
-            { label: 'Full HD', time: '1 hour' },
-            { label: '4K', time: '5-8 hours' },
-            { label: '8K', time: '2 days' }
-        ],
-        media: [
-            { type: 'image', src: 'images/exterior perspectives/higher HD_1 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_2 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_3 - Photo.jpg' },
-            { type: 'image', src: 'images/exterior perspectives/higher HD_4 - Photo.jpg' },
-            { type: 'image', src: 'images/interior/Night time Int 1.png' },
-            { type: 'image', src: 'images/interior/Night time int 2.png' }
-        ]
-    },
-    'walkthroughs': {
-        title: '3D Walkthroughs',
-        description: 'A walkthrough, as the name implies, is a 3 dimensional motion picture/video that lets the client experience the interior without having to waste much materials and waiting for its actual construction.',
-        pricing: [
-            { label: 'HD', price: '₱850' },
-            { label: 'Full HD', price: '₱1,500' },
-            { label: 'Quad HD', price: '₱4,000' },
-            { label: '4K', price: '₱7,000' }
-        ],
-        expectations: 'The walkthrough can be viewed in various angles while also maintaining its quality throughout each movement, whether it would be in the interior or exterior face of the household, the walkthrough can project it.',
-        leadtime: [
-            { label: 'HD', time: '3 hours' },
-            { label: 'Full HD', time: '6 hours' },
-            { label: 'Quad HD', time: '12 hours' },
-            { label: '4K', time: '3 days' }
-        ],
-        media: [
-            { type: 'video', src: 'images/walkthroughs/walkthrough.mp4' },
-            { type: 'video', src: 'images/walkthroughs/Render walkthrough.mp4' },
-            { type: 'image', src: 'images/interior/Kitchen.png' },
-            { type: 'image', src: 'images/interior/Dampa market.png' }
-        ]
-    }
-};
-
-// ===================================
-// Service Modal Functions
-// ===================================
-function openServiceModal(serviceId) {
-    const modal = document.getElementById('serviceModal');
-    const data = serviceData[serviceId];
-    
-    if (!data) {
-        console.error('Service not found:', serviceId);
-        return;
-    }
-    
-    currentServiceIndex = serviceOrder.indexOf(serviceId);
-    updateServiceModalContent(data);
-    
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function updateServiceModalContent(data) {
-    document.getElementById('serviceModalTitle').textContent = data.title;
-    document.getElementById('serviceModalDescription').textContent = data.description;
-    document.getElementById('serviceExpectations').textContent = data.expectations;
-    
-    // Update pricing
-    const pricingContainer = document.getElementById('servicePricing');
-    pricingContainer.innerHTML = '';
-    data.pricing.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'pricing-item';
-        div.innerHTML = `<strong>${item.label}:</strong> <span>${item.price}</span>`;
-        pricingContainer.appendChild(div);
-    });
-    
-    // Update inclusions if available
-    if (data.inclusions) {
-        document.getElementById('serviceInclusionsSection').style.display = 'block';
-        const inclusionsList = document.getElementById('serviceInclusions');
-        inclusionsList.innerHTML = '';
-        data.inclusions.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            inclusionsList.appendChild(li);
-        });
-    } else {
-        document.getElementById('serviceInclusionsSection').style.display = 'none';
-    }
-    
-    // Update lead time if available
-    if (data.leadtime) {
-        document.getElementById('serviceLeadtimeSection').style.display = 'block';
-        const leadtimeContainer = document.getElementById('serviceLeadtime');
-        leadtimeContainer.innerHTML = '';
-        data.leadtime.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'leadtime-item';
-            div.innerHTML = `<strong>${item.label}:</strong> <span>${item.time}</span>`;
-            leadtimeContainer.appendChild(div);
-        });
-    } else {
-        document.getElementById('serviceLeadtimeSection').style.display = 'none';
-    }
-    
-    // Update media gallery
-    const gallery = document.getElementById('serviceMediaGallery');
-    gallery.innerHTML = '';
-    data.media.forEach(item => {
-        if (item.type === 'image') {
-            const img = document.createElement('img');
-            img.src = item.src;
-            img.alt = data.title;
-            img.onclick = () => openLightboxFromService(item.src, data.title);
-            gallery.appendChild(img);
-        } else if (item.type === 'video') {
-            const video = document.createElement('video');
-            video.controls = true;
-            video.loop = true;
-            const source = document.createElement('source');
-            source.src = item.src;
-            source.type = 'video/mp4';
-            video.appendChild(source);
-            gallery.appendChild(video);
-        }
-    });
-}
-
-function navigateService(direction) {
-    if (direction === 'next') {
-        currentServiceIndex = (currentServiceIndex + 1) % serviceOrder.length;
-    } else {
-        currentServiceIndex = (currentServiceIndex - 1 + serviceOrder.length) % serviceOrder.length;
-    }
-    
-    const serviceId = serviceOrder[currentServiceIndex];
-    const data = serviceData[serviceId];
-    
-    const modalBody = document.querySelector('.service-modal .modal-body');
-    modalBody.style.opacity = '0';
-    modalBody.style.transform = direction === 'next' ? 'translateX(20px)' : 'translateX(-20px)';
-    
-    setTimeout(() => {
-        updateServiceModalContent(data);
-        modalBody.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        modalBody.style.opacity = '1';
-        modalBody.style.transform = 'translateX(0)';
-    }, 150);
-}
-
-function closeServiceModal() {
-    const modal = document.getElementById('serviceModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function openLightboxFromService(src, caption) {
-    // Create temporary gallery item for lightbox
-    const tempData = [{ src: src, caption: caption }];
-    const originalGalleryData = [...galleryData];
-    galleryData.length = 0;
-    galleryData.push(...tempData);
-    openLightbox(0);
-    // Restore original gallery data after opening
-    setTimeout(() => {
-        galleryData.length = 0;
-        galleryData.push(...originalGalleryData);
-    }, 100);
-}
-
-// Close service modal when clicking outside
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('serviceModal');
-    if (e.target === modal) {
-        closeServiceModal();
-    }
-});
-
-// ===================================
-// Product Details Data
-// ===================================
+console.log('Script.js is loading...');
 const productOrder = ['living-room', 'bedroom', 'dining', 'office', 'cabinets', 'tables', 'kitchen', 'tvracks'];
 let currentProductIndex = 0;
 
@@ -1194,14 +121,713 @@ const productData = {
 };
 
 // ===================================
+// Navigation & Scroll Effects
+// ===================================
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 100) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
+
+// Active navigation link on scroll
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// ===================================
+// Mobile Menu Toggle
+// ===================================
+const hamburger = document.getElementById('hamburger');
+const navLinksContainer = document.getElementById('navLinks');
+
+if (hamburger && navLinksContainer) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinksContainer.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking on a link
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navLinksContainer.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        }
+    });
+}
+
+// ===================================
+// Smooth Scroll
+// ===================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const offsetTop = target.offsetTop - 80;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// ===================================
+// Back to Top Button
+// ===================================
+const backToTopBtn = document.getElementById('backToTop');
+
+if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// ===================================
+// Scroll Reveal Animations
+// ===================================
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Observe elements for scroll animation
+const animateOnScroll = document.querySelectorAll('.product-card, .gallery-item, .testimonial-card, .feature, .about-image');
+animateOnScroll.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+
+// ===================================
+// Product Card Hover Effects
+// ===================================
+const productCards = document.querySelectorAll('.product-card');
+productCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+    });
+});
+
+// ===================================
+// Contact Form Handling
+// ===================================
+const contactForm = document.getElementById('contactForm');
+
+// Check if running on local file or web server
+function isLocalFile() {
+    return window.location.protocol === 'file:';
+}
+
+// Show local file notice and mailto fallback if needed
+if (contactForm && isLocalFile()) {
+    const localFileNotice = document.getElementById('localFileNotice');
+    const mailtoFallback = document.getElementById('mailtoFallback');
+    if (localFileNotice) localFileNotice.style.display = 'block';
+    if (mailtoFallback) mailtoFallback.style.display = 'block';
+}
+
+// Mailto fallback function
+function sendViaEmail() {
+    const name = document.getElementById('contactName')?.value || '';
+    const email = document.getElementById('contactEmail')?.value || '';
+    const phone = document.getElementById('contactPhone')?.value || '';
+    const subject = document.getElementById('contactSubject')?.value || '';
+    const message = document.getElementById('contactMessage')?.value || '';
+    
+    const emailSubject = `New Contact Form Submission - Maycie Furniture`;
+    const emailBody = `Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Subject: ${subject}
+Message: ${message}
+
+---
+Sent from Maycie Furniture Website Contact Form`;
+    
+    const mailtoLink = `mailto:yancyalmiranez@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    window.location.href = mailtoLink;
+    
+    showNotification('Opening your email client...', 'success');
+}
+
+// Add event listener for mailto fallback
+const mailtoFallback = document.getElementById('mailtoFallback');
+if (mailtoFallback) {
+    mailtoFallback.addEventListener('click', sendViaEmail);
+}
+
+// Add form validation and user feedback
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        if (isLocalFile()) {
+            // Prevent form submission on local file and use mailto instead
+            e.preventDefault();
+            sendViaEmail();
+            return;
+        }
+        
+        // Let the form submit naturally to FormSubmit when on web server
+        // Show loading state
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+        }
+        
+        // Show notification
+        showNotification('Sending your message...', 'success');
+        
+        // Note: Form will redirect to thank-you page automatically
+        // This is just for immediate user feedback
+    });
+}
+
+// ===================================
+// Notification System
+// ===================================
+function showNotification(message, type = 'success') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Style the notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 5px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 4000);
+}
+
+// Add notification animations to CSS dynamically
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ===================================
+// Gallery Lightbox Effect
+// ===================================
+let galleryItems = [];
+let currentGalleryIndex = 0;
+let activeLightbox = null;
+let galleryData = [];
+let currentLightboxData = []; // Track which dataset is currently being used
+
+// Initialize gallery after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    galleryItems = document.querySelectorAll('.gallery-item');
+    console.log('Gallery items found:', galleryItems.length);
+    
+    // Create gallery data array
+    galleryData = Array.from(galleryItems).map(item => ({
+        src: item.querySelector('img').src,
+        caption: item.querySelector('.gallery-overlay span').textContent
+    }));
+    
+    // Expose to window for service modal access
+    window.galleryData = galleryData;
+    
+    // Add click listeners to gallery items
+    galleryItems.forEach((item, index) => {
+        console.log('Adding click listener to gallery item', index);
+        item.addEventListener('click', () => {
+            console.log('Gallery item clicked:', index);
+            openLightbox(index);
+        });
+    });
+});
+
+window.activeLightbox = null;
+
+function openLightbox(index, customGalleryData = null) {
+    currentGalleryIndex = index;
+    
+    // Use custom gallery data if provided, otherwise use default galleryData
+    if (customGalleryData) {
+        currentLightboxData = customGalleryData;
+    } else {
+        currentLightboxData = galleryData;
+    }
+    
+    // Update window reference
+    window.activeLightbox = activeLightbox;
+    
+    // Create lightbox if it doesn't exist
+    if (!activeLightbox) {
+        activeLightbox = document.createElement('div');
+        window.activeLightbox = activeLightbox;
+        activeLightbox.className = 'lightbox';
+        activeLightbox.innerHTML = `
+            <div class="lightbox-content">
+                <span class="lightbox-close">&times;</span>
+                <button class="lightbox-nav lightbox-prev" title="Previous Image">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="lightbox-nav lightbox-next" title="Next Image">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+                <img class="lightbox-image" src="" alt="">
+                <p class="lightbox-caption"></p>
+                <div class="lightbox-counter"></div>
+            </div>
+        `;
+        
+        // Style lightbox
+        activeLightbox.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        const lightboxContent = activeLightbox.querySelector('.lightbox-content');
+        lightboxContent.style.cssText = `
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        `;
+        
+        const img = activeLightbox.querySelector('.lightbox-image');
+        img.style.cssText = `
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        `;
+        
+        const caption_el = activeLightbox.querySelector('.lightbox-caption');
+        caption_el.style.cssText = `
+            color: white;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        `;
+        
+        const counter = activeLightbox.querySelector('.lightbox-counter');
+        counter.style.cssText = `
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        `;
+        
+        const closeBtn = activeLightbox.querySelector('.lightbox-close');
+        closeBtn.style.cssText = `
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            z-index: 100;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        `;
+        
+        const navButtons = activeLightbox.querySelectorAll('.lightbox-nav');
+        navButtons.forEach(btn => {
+            btn.style.cssText = `
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, 0.9);
+                border: none;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                color: #2c3e50;
+                z-index: 100;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            `;
+            
+            // Hide navigation buttons on mobile
+            if (window.innerWidth <= 768) {
+                btn.style.display = 'none';
+            }
+        });
+        
+        activeLightbox.querySelector('.lightbox-prev').style.left = '20px';
+        activeLightbox.querySelector('.lightbox-next').style.right = '20px';
+        
+        // Event listeners
+        closeBtn.addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.2) rotate(90deg)';
+            this.style.background = 'rgba(199, 149, 109, 0.9)';
+        });
+        
+        closeBtn.addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+            this.style.background = 'rgba(255, 255, 255, 0.1)';
+        });
+        
+        navButtons.forEach(btn => {
+            btn.addEventListener('mouseover', function() {
+                this.style.transform = 'translateY(-50%) scale(1.1)';
+                this.style.background = '#c7956d';
+                this.style.color = 'white';
+            });
+            
+            btn.addEventListener('mouseout', function() {
+                this.style.transform = 'translateY(-50%) scale(1)';
+                this.style.background = 'rgba(255, 255, 255, 0.9)';
+                this.style.color = '#2c3e50';
+            });
+        });
+        
+        // Click events
+        closeBtn.addEventListener('click', closeLightbox);
+        const prevBtn = activeLightbox.querySelector('.lightbox-prev');
+        const nextBtn = activeLightbox.querySelector('.lightbox-next');
+        
+        prevBtn.addEventListener('click', () => navigateGallery('prev'));
+        nextBtn.addEventListener('click', () => navigateGallery('next'));
+        
+        // Touch events for mobile
+        prevBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigateGallery('prev');
+        }, { passive: false });
+        
+        nextBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigateGallery('next');
+        }, { passive: false });
+        
+        closeBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeLightbox();
+        }, { passive: false });
+        
+        activeLightbox.addEventListener('click', (e) => {
+            if (e.target === activeLightbox) {
+                closeLightbox();
+            }
+        });
+        
+        // Keyboard navigation
+        const keyHandler = (e) => {
+            if (!activeLightbox) return;
+            if (e.key === 'ArrowLeft') navigateGallery('prev');
+            if (e.key === 'ArrowRight') navigateGallery('next');
+            if (e.key === 'Escape') closeLightbox();
+        };
+        document.addEventListener('keydown', keyHandler);
+        
+        // Store handler for cleanup
+        activeLightbox.keyHandler = keyHandler;
+        
+        document.body.appendChild(activeLightbox);
+    }
+    
+    // Update content
+    updateLightboxContent();
+    document.body.style.overflow = 'hidden';
+    
+    // Update button visibility on resize
+    updateLightboxButtonVisibility();
+}
+
+function updateLightboxButtonVisibility() {
+    if (!activeLightbox) return;
+    const navButtons = activeLightbox.querySelectorAll('.lightbox-nav');
+    navButtons.forEach(btn => {
+        if (window.innerWidth <= 768) {
+            btn.style.display = 'none';
+        } else {
+            btn.style.display = 'flex';
+        }
+    });
+}
+
+// Update button visibility on window resize
+window.addEventListener('resize', updateLightboxButtonVisibility);
+
+function updateLightboxContent() {
+    const data = currentLightboxData[currentGalleryIndex];
+    const img = activeLightbox.querySelector('.lightbox-image');
+    const caption = activeLightbox.querySelector('.lightbox-caption');
+    const counter = activeLightbox.querySelector('.lightbox-counter');
+    
+    img.style.opacity = '0';
+    
+    setTimeout(() => {
+        img.src = data.src;
+        img.alt = data.caption;
+        caption.textContent = data.caption;
+        counter.textContent = `${currentGalleryIndex + 1} / ${currentLightboxData.length}`;
+        img.style.opacity = '1';
+    }, 150);
+}
+
+function navigateGallery(direction) {
+    if (direction === 'next') {
+        currentGalleryIndex = (currentGalleryIndex + 1) % currentLightboxData.length;
+    } else {
+        currentGalleryIndex = (currentGalleryIndex - 1 + currentLightboxData.length) % currentLightboxData.length;
+    }
+    updateLightboxContent();
+}
+
+function closeLightbox() {
+    if (activeLightbox) {
+        // Remove keyboard handler
+        if (activeLightbox.keyHandler) {
+            document.removeEventListener('keydown', activeLightbox.keyHandler);
+        }
+        
+        activeLightbox.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            activeLightbox.remove();
+            activeLightbox = null;
+            window.activeLightbox = null;
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+// Expose openLightbox globally for service modal
+window.openLightbox = openLightbox;
+
+// ===================================
+// Touch Swipe Support for Mobile
+// ===================================
+let touchStartX = 0;
+let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+}, { passive: true });
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    const swipeDistance = touchEndX - touchStartX;
+    const verticalDistance = Math.abs(touchEndY - touchStartY);
+    
+    // Only trigger horizontal swipe if vertical movement is minimal
+    if (verticalDistance > 100) return;
+    
+    // Gallery lightbox swipe
+    if (activeLightbox && Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            navigateGallery('prev');
+        } else {
+            navigateGallery('next');
+        }
+        return;
+    }
+    
+    // Product modal swipe
+    const productModal = document.getElementById('productModal');
+    if (productModal && productModal.classList.contains('active') && Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            navigateProduct('prev');
+        } else {
+            navigateProduct('next');
+        }
+    }
+}
+
+// Add fadeIn/fadeOut animations
+const fadeStyle = document.createElement('style');
+fadeStyle.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+`;
+document.head.appendChild(fadeStyle);
+
+// ===================================
+// Page Load Animation
+// ===================================
+window.addEventListener('load', () => {
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 100);
+});
+
+// ===================================
+// Parallax Effect for Hero Section
+// ===================================
+window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    const scrolled = window.scrollY;
+    if (hero) {
+        hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+    }
+});
+
+// ===================================
+// Console Welcome Message
+// ===================================
+console.log('%c Welcome to Maycie Furniture & Fixture Trading! ', 'background: #c7956d; color: white; font-size: 20px; padding: 10px;');
+console.log('%c Crafting Quality Furniture for Your Perfect Space ', 'background: #2c3e50; color: white; font-size: 14px; padding: 5px;');
+
+// ===================================
+// ===================================
 // Product Modal Functions
 // ===================================
 function openProductModal(productId) {
+    console.log('openProductModal called with:', productId);
     const modal = document.getElementById('productModal');
+    console.log('Modal element:', modal);
     const data = productData[productId];
+    console.log('Product data:', data);
     
     if (!data) {
         console.error('Product not found:', productId);
+        return;
+    }
+    
+    if (!modal) {
+        console.error('Product modal element not found');
         return;
     }
     
@@ -1273,39 +899,16 @@ function scrollToContact() {
     }, 300);
 }
 
-// Close modal when clicking outside
+// Close modals when clicking outside
 document.addEventListener('click', (e) => {
-    const modal = document.getElementById('productModal');
-    if (e.target === modal) {
+    const productModal = document.getElementById('productModal');
+    if (e.target === productModal) {
         closeProductModal();
     }
 });
 
 // Add touch event support for mobile devices
 document.addEventListener('DOMContentLoaded', () => {
-    // Service modal navigation buttons
-    const serviceModal = document.getElementById('serviceModal');
-    if (serviceModal) {
-        const servicePrev = serviceModal.querySelector('.modal-prev');
-        const serviceNext = serviceModal.querySelector('.modal-next');
-        
-        if (servicePrev) {
-            servicePrev.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navigateService('prev');
-            }, { passive: false });
-        }
-        
-        if (serviceNext) {
-            serviceNext.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                navigateService('next');
-            }, { passive: false });
-        }
-    }
-    
     // Product modal navigation buttons
     const productModal = document.getElementById('productModal');
     if (productModal) {
@@ -1340,19 +943,6 @@ document.addEventListener('keydown', (e) => {
             navigateGallery('next');
         } else if (e.key === 'ArrowLeft') {
             navigateGallery('prev');
-        }
-        return;
-    }
-    
-    // Check if service modal is open
-    const serviceModal = document.getElementById('serviceModal');
-    if (serviceModal && serviceModal.classList.contains('active')) {
-        if (e.key === 'Escape') {
-            closeServiceModal();
-        } else if (e.key === 'ArrowRight') {
-            navigateService('next');
-        } else if (e.key === 'ArrowLeft') {
-            navigateService('prev');
         }
         return;
     }
