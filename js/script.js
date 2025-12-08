@@ -321,7 +321,11 @@ if (contactForm) {
             // Get the current page URL and replace index.html with thank-you.html
             const currentUrl = window.location.href;
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-            nextField.value = baseUrl + 'thank-you.html';
+            const thankYouUrl = baseUrl + 'thank-you.html';
+            nextField.value = thankYouUrl;
+            console.log('Setting redirect URL to:', thankYouUrl);
+        } else {
+            console.log('Not setting redirect URL. isLocalFile:', isLocalFile(), 'nextField:', nextField);
         }
         
         // Add Philippine time to the form
