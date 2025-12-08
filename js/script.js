@@ -315,6 +315,15 @@ if (mailtoFallback) {
 // Add form validation and user feedback
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
+        // Set the redirect URL dynamically
+        const nextField = contactForm.querySelector('input[name="_next"]');
+        if (nextField && !isLocalFile()) {
+            // Get the current page URL and replace index.html with thank-you.html
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+            nextField.value = baseUrl + 'thank-you.html';
+        }
+        
         // Add Philippine time to the form
         const philippineTimeField = document.getElementById('philippineTime');
         if (philippineTimeField) {
