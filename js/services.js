@@ -50,9 +50,9 @@ const serviceData = {
         title: '3D Perspectives',
         description: 'Perspectives can adhere the floor plan and interior elevation views into one three dimensional or 2 dimensional photo where the details may vary depending on its quality.',
         pricing: [
-            { label: 'Full HD', price: '₱500' },
-            { label: '4K Resolution', price: '₱1,500' },
-            { label: '8K Resolution', price: '₱3,500' }
+            { label: 'Full HD', price: '₱1,250' },
+            { label: '4K Resolution', price: '₱3,750' },
+            { label: '8K Resolution', price: '₱8,750' }
         ],
         expectations: 'The perspective views can highlight each detail without having the need to purchase the said object as the product will be on par with its actual.',
         leadtime: [
@@ -73,10 +73,10 @@ const serviceData = {
         title: '3D Walkthroughs',
         description: 'A walkthrough, as the name implies, is a 3 dimensional motion picture/video that lets the client experience the interior without having to waste much materials and waiting for its actual construction.',
         pricing: [
-            { label: 'HD', price: '₱850' },
-            { label: 'Full HD', price: '₱1,500' },
-            { label: 'Quad HD', price: '₱4,000' },
-            { label: '4K', price: '₱7,000' }
+            { label: 'HD', price: '₱2,550' },
+            { label: 'Full HD', price: '₱3,750' },
+            { label: 'Quad HD', price: '₱10,000' },
+            { label: '4K', price: '₱17,500' }
         ],
         expectations: 'The walkthrough can be viewed in various angles while also maintaining its quality throughout each movement, whether it would be in the interior or exterior face of the household, the walkthrough can project it.',
         leadtime: [
