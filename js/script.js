@@ -290,7 +290,7 @@ function sendViaEmail() {
     const subject = document.getElementById('contactSubject')?.value || '';
     const message = document.getElementById('contactMessage')?.value || '';
     
-    const emailSubject = `New Contact Form Submission - Maycie Furniture`;
+    const emailSubject = `Client Inquiry - Maycie Furniture and Fixture Trading`;
     const emailBody = `Name: ${name}
 Email: ${email}
 Phone: ${phone}
@@ -315,6 +315,26 @@ if (mailtoFallback) {
 // Add form validation and user feedback
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
+        // Add Philippine time to the form
+        const philippineTimeField = document.getElementById('philippineTime');
+        if (philippineTimeField) {
+            const now = new Date();
+            // Convert to Philippine time (UTC+8)
+            const philippineTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+            const formattedTime = philippineTime.toLocaleString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            }) + ' (PHT)';
+            philippineTimeField.value = formattedTime;
+        }
+        
         if (isLocalFile()) {
             // Prevent form submission on local file and use mailto instead
             e.preventDefault();
