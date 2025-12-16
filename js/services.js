@@ -1,7 +1,7 @@
 // ===================================
 // Service Details Data
 // ===================================
-const serviceOrder = ['floor-plans', 'interior-elevations', 'perspectives', 'walkthroughs'];
+const serviceOrder = ['floor-plans', 'interior-elevations', 'perspectives', 'walkthroughs', 'paint-works', 'electrical'];
 let currentServiceIndex = 0;
 
 const serviceData = {
@@ -88,6 +88,54 @@ const serviceData = {
         media: [
             { type: 'video', src: 'images/walkthroughs/walkthrough.mp4' },
             { type: 'video', src: 'images/walkthroughs/Render walkthrough.mp4' }
+        ]
+    },
+    'paint-works': {
+        title: 'Paint Works',
+        description: 'Transform your space with professional painting services. We provide high-quality interior and exterior painting with attention to detail and lasting finishes.',
+        pricing: [
+            { label: 'Interior Painting', price: '₱150 - ₱250 per sqm' },
+            { label: 'Exterior Painting', price: '₱200 - ₱300 per sqm' },
+            { label: 'Ceiling Painting', price: '₱100 - ₱180 per sqm' }
+        ],
+        expectations: 'Our painting services include surface preparation, primer application, and multiple coats of premium paint. We ensure clean lines, smooth finishes, and proper protection of your furniture and floors.',
+        inclusions: [
+            'Surface preparation and cleaning',
+            'Primer and paint application',
+            'Multiple coats for durability',
+            'Clean-up and waste disposal',
+            'Color consultation available',
+            'Quality paint brands'
+        ],
+        media: [
+            { type: 'image', src: 'images/services/paint-works.jpg' }
+        ]
+    },
+    'electrical': {
+        title: 'Electrical Services',
+        description: 'Complete electrical solutions for residential and commercial spaces. Our licensed electricians ensure safe, code-compliant installations for all your electrical needs.',
+        pricing: [
+            { label: 'Wiring Installation', price: '₱500 - ₱1,500 per point' },
+            { label: 'Lighting Installation', price: '₱300 - ₱800 per fixture' },
+            { label: 'Panel Upgrade', price: '₱5,000 - ₱15,000' },
+            { label: 'Consultation', price: 'FREE with service' }
+        ],
+        expectations: 'All electrical work is performed by licensed professionals following safety standards and building codes. We provide warranties on our workmanship and use quality materials.',
+        inclusions: [
+            'Complete wiring installation',
+            'Lighting fixture installation',
+            'Outlet and switch installation',
+            'Circuit breaker installation',
+            'Electrical panel upgrades',
+            'Safety inspection and testing'
+        ],
+        leadtime: [
+            { label: 'Small Projects', time: '1-2 days' },
+            { label: 'Medium Projects', time: '3-5 days' },
+            { label: 'Large Projects', time: '1-2 weeks' }
+        ],
+        media: [
+            { type: 'image', src: 'images/services/electrical.jpg' }
         ]
     }
 };
