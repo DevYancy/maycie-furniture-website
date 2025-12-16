@@ -94,9 +94,7 @@ const serviceData = {
         title: 'Paint Works',
         description: 'Transform your space with professional painting services. We provide high-quality interior and exterior painting with attention to detail and lasting finishes.',
         pricing: [
-            { label: 'Interior Painting', price: '₱150 - ₱250 per sqm' },
-            { label: 'Exterior Painting', price: '₱200 - ₱300 per sqm' },
-            { label: 'Ceiling Painting', price: '₱100 - ₱180 per sqm' }
+            { label: 'Labor and Materials', price: '₱650 per sqm' }
         ],
         expectations: 'Our painting services include surface preparation, primer application, and multiple coats of premium paint. We ensure clean lines, smooth finishes, and proper protection of your furniture and floors.',
         inclusions: [
@@ -108,17 +106,14 @@ const serviceData = {
             'Quality paint brands'
         ],
         media: [
-            { type: 'image', src: 'images/services/paint-works.jpg' }
+            { type: 'image', src: 'images/services/paint.png' }
         ]
     },
     'electrical': {
         title: 'Electrical Services',
         description: 'Complete electrical solutions for residential and commercial spaces. Our licensed electricians ensure safe, code-compliant installations for all your electrical needs.',
         pricing: [
-            { label: 'Wiring Installation', price: '₱500 - ₱1,500 per point' },
-            { label: 'Lighting Installation', price: '₱300 - ₱800 per fixture' },
-            { label: 'Panel Upgrade', price: '₱5,000 - ₱15,000' },
-            { label: 'Consultation', price: 'FREE with service' }
+            { label: 'Labor and Materials', price: '₱900 per sqm' }
         ],
         expectations: 'All electrical work is performed by licensed professionals following safety standards and building codes. We provide warranties on our workmanship and use quality materials.',
         inclusions: [
@@ -135,7 +130,7 @@ const serviceData = {
             { label: 'Large Projects', time: '1-2 weeks' }
         ],
         media: [
-            { type: 'image', src: 'images/services/electrical.jpg' }
+            { type: 'image', src: 'images/services/electrical.png' }
         ]
     }
 };
